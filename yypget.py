@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
+from yypget import *
 
+"""
 def main():
     video_url = 'https://sv.baidu.com/videoui/page/videoland?pd=bjh&context=\
     {%22nid%22:%224949783038993399443%22,%22sourceFrom%22:%22bjh%22}&fr=bjha\
@@ -23,6 +25,21 @@ def main():
                 mp4.write(chunk)
 
     print('download done')
+"""
+
+def download_wrapper(url, output_dir = '.'):
+    print('download_wrapper called')
+
+    supported_sites = {
+        'baidu': baidu,
+    }
+
+    m = supported_sites['baidu']
+    m.download(url, output_dir = output_dir)
+
+def main(download):
+    url = 'http://www.test.com'
+    download(url)
 
 if __name__ == '__main__':
-    main()
+    main(download_wrapper)
