@@ -7,21 +7,25 @@ from bs4 import BeautifulSoup
 # https://sv.baidu.com/videoui/page/videoland?pd=bjh&context={%22nid%22:%224949783038993399443%22,%22sourceFrom%22:%22bjh%22}&fr=bjhauthor&type=video
 
 def baidu_download(url, output_dir = '.'):
-    print('baidu_download url: %s' % url)
-
     r = requests.get(url)
-    print('status_code:', r.status_code)
+    assert(r.status_code == 200)
 
     soup = BeautifulSoup(r.text, features = 'html.parser')
-    video_real_url = soup.find(id = 'main-player')
-    print(video_real_url.video.source.attrs['src'])
+    find_result = soup.find(id = 'main-player')
+    assert(find_result)
 
     # download video
-    video_real_url_str = video_real_url.video.source.attrs['src']
-    video_r = requests.get(video_real_url_str, stream = True)
+    video_real_url = find_result.video.source.attrs['src']
+    assert(video_real_url)
+    print("real url: %s" % video_real_url)
 
-    with open('video.mp4', 'wb') as mp4:
-        for chunk in video_r.iter_content(chunk_size = 1024 * 1024):
+    video_title = soup.title.string
+    assert(video_title)
+    print('title: %s' % video_title)
+
+    video = requests.get(video_real_url, stream = True)
+    with open(video_title + '.mp4', 'wb') as mp4:
+        for chunk in video.iter_content(chunk_size = 1024 * 1024):
             if chunk:
                 mp4.write(chunk)
 
