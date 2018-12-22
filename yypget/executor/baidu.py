@@ -19,7 +19,6 @@ def baidu_download(url, output_dir = '.'):
     # download video
     video_real_url = find_result.video.source.attrs['src']
     assert(video_real_url)
-    print('real url: %s' % video_real_url)
 
     video_title = soup.title.string
     assert(video_title)
@@ -29,7 +28,7 @@ def baidu_download(url, output_dir = '.'):
     video = requests.get(video_real_url, stream = True)
     assert(video.status_code == 200)
 
-    t = tqdm(total = int(video.headers['Content-Length']))
+    t = tqdm(total = int(video.headers['Content-Length']), ascii = True)
 
     with open(video_file + '.mp4', 'wb') as mp4:
         for chunk in video.iter_content(chunk_size = 1024):
