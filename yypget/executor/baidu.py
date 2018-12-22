@@ -2,6 +2,7 @@
 
 import requests
 from bs4 import BeautifulSoup
+import os
 
 # test url:
 # https://sv.baidu.com/videoui/page/videoland?pd=bjh&context={%22nid%22:%224949783038993399443%22,%22sourceFrom%22:%22bjh%22}&fr=bjhauthor&type=video
@@ -23,8 +24,11 @@ def baidu_download(url, output_dir = '.'):
     assert(video_title)
     print('title: %s' % video_title)
 
+    video_file = os.path.join(output_dir, video_title)
+    print('video_file: %s' % video_file)
+
     video = requests.get(video_real_url, stream = True)
-    with open(video_title + '.mp4', 'wb') as mp4:
+    with open(video_file + '.mp4', 'wb') as mp4:
         for chunk in video.iter_content(chunk_size = 1024 * 1024):
             if chunk:
                 mp4.write(chunk)

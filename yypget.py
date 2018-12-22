@@ -1,5 +1,6 @@
 import sys, getopt
 import re
+import argparse
 from yypget import *
 
 def r1(pattern, text):
@@ -36,25 +37,23 @@ def download_wrapper(url, output_dir = '.'):
     m.download(url, output_dir = output_dir)
 
 def main(download):
-    help = 'Usage: python3 yypget.py [URL]'
+    parser = argparse.ArgumentParser()
+    parser.add_argument('url', metavar = 'URL')
+    parser.add_argument('-o', '--output-dir', help = 'set output directory')
 
-    short_opts = 'h'
+    url = ''
+    output_dir = '.'
 
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], short_opts)
-    except getopt.GetoptError as err:
-        print(err)
-        print(help)
-        sys.exit()
+    args = parser.parse_args()
+    if args.url:
+        url = args.url
+        print('url: %s' % url)
 
-    for op, value in opts:
-        if op == '-h':
-            print(help)
-            sys.exit()
+    if args.output_dir:
+        output_dir = args.output_dir
+        print('output_dir: %s' % output_dir)
 
-    for url in args:
-        print('input url: %s' % url)
-        download(url)
+    download(url, output_dir)
 
 if __name__ == '__main__':
     main(download_wrapper)
