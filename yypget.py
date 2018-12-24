@@ -1,12 +1,6 @@
 import sys, getopt
-import re
 import argparse
 from yypget import *
-
-def r1(pattern, text):
-    m = re.search(pattern, text)
-    if m:
-        return m.group(1)
 
 def download_wrapper(url, output_dir = '.'):
     host = r1(r'https?://([^/]+)/', url)
