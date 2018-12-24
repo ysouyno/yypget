@@ -39,5 +39,3 @@ $@&&&&&&&@########@%;;;;::':''````;!;|!;''`:
 The following dependencies are required and must be installed separately.
 
 * **[Python 3](https://www.python.org/downloads/)**
-* **[Requests](http://www.python-requests.org/en/master/)**
-* **[Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/)**

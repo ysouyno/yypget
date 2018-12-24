@@ -1,14 +1,14 @@
 import re
-import requests
+from urllib import request
 
 def r1(pattern, text):
     m = re.search(pattern, text)
     if m:
         return m.group(1)
 
-def get_url_file_ext(url):
-    resp = requests.get(url)
-    assert resp.status_code == 200
+def get_url_file_ext_size(url):
+    resp = request.urlopen(url)
+    assert resp, resp.getcode() == 200
 
     type = resp.headers['Content-Type']
     type_dict = {
@@ -21,4 +21,7 @@ def get_url_file_ext(url):
 
     assert type in type_dict, type
 
-    return type_dict[type]
+    ext = type_dict[type]
+    size = resp.headers['Content-Length']
+
+    return ext, size
