@@ -1,6 +1,9 @@
+#!/usr/bin/env python
+
 import sys, getopt
 import argparse
-from yypget import *
+from .utils import *
+from .executor import *
 
 def download_wrapper(url, output_dir = '.'):
     host = r1(r'https?://([^/]+)/', url)
@@ -26,7 +29,7 @@ def download_wrapper(url, output_dir = '.'):
 
     m.download(url, output_dir = output_dir)
 
-def main(download):
+def yypget_main(download):
     parser = argparse.ArgumentParser()
     parser.add_argument('url', metavar = 'URL')
     parser.add_argument('-o', '--output-dir', help = 'set output directory')
@@ -43,5 +46,8 @@ def main(download):
 
     download(url, output_dir)
 
+def main(**kwargs):
+    yypget_main(download_wrapper)
+
 if __name__ == '__main__':
-    main(download_wrapper)
+    main()
