@@ -7,6 +7,9 @@ from ..utils import *
 # test url:
 # https://sv.baidu.com/videoui/page/videoland?pd=bjh&context={%22nid%22:%224949783038993399443%22,%22sourceFrom%22:%22bjh%22}&fr=bjhauthor&type=video
 
+def urlretrieve_callback(count, size, total):
+    print('count: %s, size: %s, total: %s' % (count, size, total))
+
 def baidu_download(url, output_dir = '.'):
     resp = request.urlopen(url)
     assert resp, resp.getcode() == 200
@@ -30,9 +33,7 @@ def baidu_download(url, output_dir = '.'):
     video_file = title + '.' + ext
     video_file = os.path.join(output_dir, video_file)
 
-    # TODO: How to use tqdm in urllib.request
-
-    request.urlretrieve(true_url, video_file)
+    request.urlretrieve(true_url, video_file, urlretrieve_callback)
     print('download success: %s' % video_file)
 
 download = baidu_download
