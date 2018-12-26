@@ -9,14 +9,21 @@ setuptools.setup(
     author = "ysouyno",
     author_email = "ysouyno@163.com",
     description = "Download online video from the web",
+    license = "MIT",
     long_description = long_description,
     long_description_content_type = "text/markdown",
     url = "https://github.com/ysouyno/yypget",
-    packages = setuptools.find_packages(),
-    install_requires = ['requests', 'BeautifulSoup4'],
+
     classifiers = [
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+
+    packages = setuptools.find_packages('src'),
+    package_dir = {'': 'src'},
+
+    entry_points = {
+        'console_scripts': 'yypget = yypget.__main__:main'
+    }
 )
