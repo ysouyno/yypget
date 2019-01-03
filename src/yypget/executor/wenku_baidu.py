@@ -1,12 +1,39 @@
 #!/usr/bin/env python3
 
 from urllib import request
+import json
 from ..utils import *
 
 url_list = []
 
-def get_txt(page, title):
-    pass
+# test url: https://wenku.baidu.com/view/6f4ca758312b3169a451a4a7.html
+
+def get_txt(page_url, title):
+    # print('page_url: %s' % page_url)
+    resp = request.urlopen(page_url)
+    assert resp, resp.getcode() == 200
+
+    page_data = resp.read()
+    assert page_data
+
+    page_data = page_data.decode('utf-8')
+    assert page_data
+    # print('page_data: %s' % page_data)
+
+    page_json = json.loads(page_data.split('(', 1)[1].strip(')'))
+    assert page_json
+    # print(page_json)
+
+    page_json = page_json['body']
+
+    for i in page_json:
+        if i['t'] == 'word':
+            txt = i['c']
+
+            if i['ps'] != None and '_enter' in i['ps'].keys():
+                txt = '\n'
+
+            print(txt)
 
 def get_txt_wrapper(urls, title):
     urls = urls.replace('\\x22', '')
@@ -16,7 +43,7 @@ def get_txt_wrapper(urls, title):
     assert urls
 
     urls = re.findall(r'pageLoadUrl:.*\w', urls)[0].split(',')
-    print('urls: %s' % urls)
+    # print('urls: %s' % urls)
     print('urls length: %s' % len(urls))
 
     for url in urls:
@@ -25,8 +52,8 @@ def get_txt_wrapper(urls, title):
 
     print("url_list length: %s" % len(url_list))
 
-    for page in url_list:
-        get_txt(page, title)
+    for page_url in url_list:
+        get_txt(page_url, title)
 
 def wenku_baidu_download(url, output_dir = '.'):
     resp = request.urlopen(url)
