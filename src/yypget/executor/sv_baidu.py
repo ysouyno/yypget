@@ -13,7 +13,7 @@ def urlretrieve_callback(count, size, total):
     sys.stdout.write('\rDownloading: [%d/%d]' % (count, math.ceil(total / size)))
     sys.stdout.flush()
 
-def baidu_download(url, output_dir = '.'):
+def sv_baidu_download(url, output_dir = '.'):
     resp = request.urlopen(url)
     assert resp, resp.getcode() == 200
 
@@ -40,4 +40,4 @@ def baidu_download(url, output_dir = '.'):
     request.urlretrieve(true_url, video_file, urlretrieve_callback)
     print('\nDownload OK: \"%s\"' % video_file)
 
-download = baidu_download
+download = sv_baidu_download

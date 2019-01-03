@@ -12,14 +12,21 @@ def download_wrapper(url, output_dir = '.'):
     if host.endswith('.com.cn'):
         host = host[:-3]
 
+    """
     domain = r1(r'(\.[^.]+\.[^.]+)$', host)
     assert(domain)
 
     site = r1(r'([^.]+)', domain)
     assert(site)
+    """
+
+    site = r1(r'([a-zA-Z0-9]+\.[a-zA-Z0-9]+)', host)
+    assert(site)
+    print(site)
 
     supported_sites = {
-        'baidu': baidu,
+        'sv.baidu': sv_baidu,
+        'wenku.baidu': wenku_baidu,
     }
 
     if site in supported_sites:
