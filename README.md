@@ -34,8 +34,23 @@ $@&&&&&&&@########@%;;;;::':''````;!;|!;''`:
    :$&&$%$&&@%!!:'``'::``'''`````':;;;!;:;;;
 ```
 
-## Prerequisites
+## Installation
+
+### Prerequisites
 
 The following dependencies are required and must be installed separately.
 
 * **[Python 3](https://www.python.org/downloads/)**
+
+### Install via pip
+
+```console
+$ pip3 install yypget
+```
+
+## Supported Sites
+
+| Site     | URL                        | Video    | Doc      |
+| :------: | :------                    | :------: | :------: |
+| 好看视频 | <https://sv.baidu.com/>    | *        |          |
+| 百度文库 | <https://wenku.baidu.com/> |          | *        |

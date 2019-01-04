@@ -34,7 +34,7 @@ def get_txt(page_url, path_file):
             if i['ps'] != None and '_enter' in i['ps'].keys():
                 txt = '\n'
 
-            print(txt, end = '')
+            # print(txt, end = '')
 
             with open(path_file, 'a') as f:
                 f.write(txt)
@@ -96,5 +96,7 @@ def wenku_baidu_download(url, output_dir = '.'):
 
     if os.path.exists(path_file) and os.path.getsize(path_file) > 0:
         print('Download OK: %s' % path_file)
+    else:
+        print('Download Nothing')
 
 download = wenku_baidu_download

@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name = "yypget",
-    version = "0.0.1",
+    version = "0.0.2",
     author = "ysouyno",
     author_email = "ysouyno@163.com",
-    description = "Download online video from the web",
+    description = "Download videos, documents, etc. from the website",
     license = "MIT",
     long_description = long_description,
     long_description_content_type = "text/markdown",
