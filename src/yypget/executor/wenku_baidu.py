@@ -2,13 +2,14 @@
 
 from urllib import request
 import json
+import os
 from ..utils import *
 
 url_list = []
 
 # test url: https://wenku.baidu.com/view/6f4ca758312b3169a451a4a7.html
 
-def get_txt(page_url, title):
+def get_txt(page_url, path_file):
     # print('page_url: %s' % page_url)
     resp = request.urlopen(page_url)
     assert resp, resp.getcode() == 200
@@ -33,9 +34,12 @@ def get_txt(page_url, title):
             if i['ps'] != None and '_enter' in i['ps'].keys():
                 txt = '\n'
 
-            print(txt)
+            print(txt, end = '')
 
-def get_txt_wrapper(urls, title):
+            with open(path_file, 'a') as f:
+                f.write(txt)
+
+def get_txt_wrapper(urls, path_file):
     urls = urls.replace('\\x22', '')
     assert urls
 
@@ -44,16 +48,16 @@ def get_txt_wrapper(urls, title):
 
     urls = re.findall(r'pageLoadUrl:.*\w', urls)[0].split(',')
     # print('urls: %s' % urls)
-    print('urls length: %s' % len(urls))
+    # print('urls length: %s' % len(urls))
 
     for url in urls:
         if 'json' in url:
             url_list.append(url.split(':', 1)[1].replace('}', '').strip(']'))
 
-    print("url_list length: %s" % len(url_list))
+    # print("url_list length: %s" % len(url_list))
 
     for page_url in url_list:
-        get_txt(page_url, title)
+        get_txt(page_url, path_file)
 
 def wenku_baidu_download(url, output_dir = '.'):
     resp = request.urlopen(url)
@@ -82,7 +86,15 @@ def wenku_baidu_download(url, output_dir = '.'):
     assert wkinfo_htmlurls
     # print(wkinfo_htmlurls)
 
+    output_dir = os.path.realpath(output_dir)
+    path_file = doc_title + '.txt'
+    path_file = os.path.join(output_dir, path_file)
+    # print(path_file)
+
     if doc_type == 'doc':
-        get_txt_wrapper(wkinfo_htmlurls, doc_title)
+        get_txt_wrapper(wkinfo_htmlurls, path_file)
+
+    if os.path.exists(path_file) and os.path.getsize(path_file) > 0:
+        print('Download OK: %s' % path_file)
 
 download = wenku_baidu_download
