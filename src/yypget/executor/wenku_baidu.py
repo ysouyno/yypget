@@ -79,7 +79,11 @@ def get_txt(url, path_file):
     # print(txt_json)
 
     for page in txt_json:
-        print(page['parags'][0]['c'])
+        txt = page['parags'][0]['c']
+        # print(txt)
+
+        with open(path_file, 'a') as f:
+            f.write(txt)
 
 def get_txt_wrapper(url, path_file):
     print('get_txt_wrapper url: %s' % url)
@@ -108,12 +112,17 @@ def get_txt_wrapper(url, path_file):
     total_page_num = json_doc_info['totalPageNum']
     print('totalPageNum: %s' % total_page_num)
 
+    rsign = json_data['rsign']
+    print('rsign: %s' % rsign)
+
     txt_json_url = 'https://wkretype.bdimg.com/retype/text/'
     txt_json_url += doc_id
     txt_json_url += '?'
     txt_json_url += md5sum
     txt_json_url += '&callback=cb&pn=1&rn='
     txt_json_url += total_page_num
+    txt_json_url += '&rsign='
+    txt_json_url += rsign
 
     get_txt(txt_json_url, path_file)
 
