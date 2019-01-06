@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name = "yypget",
-    version = "0.0.2",
+    version = "0.0.3",
     author = "ysouyno",
     author_email = "ysouyno@163.com",
     description = "Download videos, documents, etc. from the website",

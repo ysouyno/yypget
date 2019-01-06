@@ -6,8 +6,6 @@ import os
 import gzip
 from ..utils import *
 
-url_list = []
-
 # test url: https://wenku.baidu.com/view/6f4ca758312b3169a451a4a7.html
 
 def get_doc(page_url, path_file):
@@ -51,6 +49,8 @@ def get_doc_wrapper(urls, path_file):
     # print('urls: %s' % urls)
     # print('urls length: %s' % len(urls))
 
+    url_list = []
+
     for url in urls:
         if 'json' in url:
             url_list.append(url.split(':', 1)[1].replace('}', '').strip(']'))
@@ -61,7 +61,6 @@ def get_doc_wrapper(urls, path_file):
         get_doc(page_url, path_file)
 
 def get_txt(url, path_file):
-    print('get_txt url: %s' % url)
     resp = request.urlopen(url)
     assert resp, resp.getcode() == 200
 
@@ -86,7 +85,6 @@ def get_txt(url, path_file):
             f.write(txt)
 
 def get_txt_wrapper(url, path_file):
-    print('get_txt_wrapper url: %s' % url)
     resp = request.urlopen(url)
     assert resp, resp.getcode() == 200
 
@@ -101,10 +99,10 @@ def get_txt_wrapper(url, path_file):
     # print('json_data: %s' % json_data)
 
     doc_id = json_data['doc_id']
-    print('doc_id: %s' % doc_id)
+    # print('doc_id: %s' % doc_id)
 
     md5sum = json_data['md5sum']
-    print('md5sum: %s' % md5sum)
+    # print('md5sum: %s' % md5sum)
 
     json_doc_info = json_data['docInfo']
     assert json_doc_info
@@ -113,7 +111,7 @@ def get_txt_wrapper(url, path_file):
     print('totalPageNum: %s' % total_page_num)
 
     rsign = json_data['rsign']
-    print('rsign: %s' % rsign)
+    # print('rsign: %s' % rsign)
 
     txt_json_url = 'https://wkretype.bdimg.com/retype/text/'
     txt_json_url += doc_id
@@ -161,8 +159,8 @@ def wenku_baidu_download(url, output_dir = '.'):
 
         get_doc_wrapper(wkinfo_htmlurls, path_file)
     elif doc_type == 'txt':
-        getdocinfo_url = r'https://wenku.baidu.com/api/doc/getdocinfo?callback=cb&doc_id='
-        getdocinfo_url += doc_id
+        getdocinfo_url = 'https://wenku.baidu.com/api/doc/getdocinfo'
+        getdocinfo_url = getdocinfo_url + '?callback=cb&doc_id=' + doc_id
         get_txt_wrapper(getdocinfo_url, path_file)
     else:
         print('Neither doc nor txt')

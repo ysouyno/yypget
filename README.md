@@ -50,7 +50,14 @@ $ pip3 install yypget
 
 ## Supported Sites
 
-| Site     | URL                        | Video    | Doc      |
-| :------: | :------                    | :------: | :------: |
-| 好看视频 | <https://sv.baidu.com/>    | *        |          |
-| 百度文库 | <https://wenku.baidu.com/> |          | *        |
+### Video
+
+| Site     | URL                     | Video    |
+| :------: | :------                 | :------: |
+| 好看视频 | <https://sv.baidu.com/> | *        |
+
+### Document
+
+| Site     | URL                        | DOC      | TXT      | PPT      | PDF      |
+| :------: | :------                    | :------: | :------: | :------: | :------: |
+| 百度文库 | <https://wenku.baidu.com/> | *        | *        |          |          |
