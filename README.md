@@ -55,6 +55,7 @@ $ pip3 install yypget
 | Site     | URL                     | Video    |
 | :------: | :------                 | :------: |
 | 好看视频 | <https://sv.baidu.com/> | *        |
+| 搜狐视频 | <https://tv.sohu.com/>  | *        |
 
 ### Document
 
