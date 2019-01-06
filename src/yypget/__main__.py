@@ -27,6 +27,7 @@ def download_wrapper(url, output_dir = '.'):
     supported_sites = {
         'sv.baidu': sv_baidu,
         'wenku.baidu': wenku_baidu,
+        'tv.sohu': tv_sohu
     }
 
     if site in supported_sites:
