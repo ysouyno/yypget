@@ -48,6 +48,12 @@ The following dependencies are required and must be installed separately.
 $ pip3 install yypget
 ```
 
+## Upgrading
+
+```console
+$ pip3 install --upgrade yypget
+```
+
 ## Supported Sites
 
 ### Video
