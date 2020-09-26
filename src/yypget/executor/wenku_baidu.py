@@ -45,6 +45,7 @@ def get_doc_wrapper(urls, path_file):
     urls = urls.replace('\\', '')
     assert urls
 
+    """
     urls = re.findall(r'pageLoadUrl:.*\w', urls)[0].split(',')
     # print('urls: %s' % urls)
     # print('urls length: %s' % len(urls))
@@ -59,6 +60,13 @@ def get_doc_wrapper(urls, path_file):
 
     for page_url in url_list:
         get_doc(page_url, path_file)
+    """
+
+    urls_json = json.loads(urls)
+    index = 0
+    for page_load_url in urls_json["json"]:
+        get_doc(page_load_url["pageLoadUrl"] + urls_json["ttf"][index]["param"], path_file)
+        index = index + 1
 
 def get_txt(url, path_file):
     resp = request.urlopen(url)
@@ -132,9 +140,10 @@ def wenku_baidu_download(url, output_dir = '.'):
     data = resp.read()
     assert data
 
-    data = data.decode('gb2312')
+    data = data.decode('utf-8')
     assert data
 
+    """
     doc_title = r1(r'\'title\'\:\s+\'(.+)\'', data)
     assert doc_title
     print('doc_title: %s' % doc_title)
@@ -146,14 +155,30 @@ def wenku_baidu_download(url, output_dir = '.'):
     doc_type = r1(r'\'docType\'\:\s+\'(.+)\'', data)
     assert doc_type
     print('doc_type: %s' % doc_type)
+    """
+
+    page_data = r1(r'\=\s+{(.+)\}', data)
+    page_data = '{' + page_data + '}'
+
+    page_data_json = json.loads(page_data)
+
+    doc_title = page_data_json["docInfo2019"]["doc_info"]["title"]
+    print('title: %s' % doc_title)
+
+    doc_id = page_data_json["docInfo2019"]["doc_info"]["show_doc_id"]
+    print('show_doc_id: %s' % doc_id)
+
+    doc_type = page_data_json["docInfo2019"]["doc_info"]["doc_type"];
+    print('doc_type: %s' % doc_type)
 
     output_dir = os.path.realpath(output_dir)
     path_file = doc_title + '.txt'
     path_file = os.path.join(output_dir, path_file)
     # print(path_file)
 
-    if doc_type == 'doc':
-        wkinfo_htmlurls = r1(r'WkInfo.htmlUrls\s+\=\s+\'(.+)\'\;', data)
+    if doc_type == 2: # 'doc'
+        # wkinfo_htmlurls = r1(r'WkInfo.htmlUrls\s+\=\s+\'(.+)\'\;', data)
+        wkinfo_htmlurls = page_data_json["readerInfo2019"]["htmlUrls"]
         assert wkinfo_htmlurls
         # print(wkinfo_htmlurls)
 
