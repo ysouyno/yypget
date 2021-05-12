@@ -5,6 +5,9 @@ import json
 import os
 import gzip
 from ..utils import *
+from selenium import webdriver
+import time
+import pickle
 
 # test url: https://wenku.baidu.com/view/6f4ca758312b3169a451a4a7.html
 
@@ -35,7 +38,7 @@ def get_doc(page_url, path_file):
 
             # print(doc, end = '')
 
-            with open(path_file, 'a') as f:
+            with open(path_file, 'a', encoding='utf-8') as f:
                 f.write(doc)
 
 def get_doc_wrapper(urls, path_file):
@@ -133,6 +136,7 @@ def get_txt_wrapper(url, path_file):
     get_txt(txt_json_url, path_file)
 
 def wenku_baidu_download(url, output_dir = '.'):
+    """
     resp = request.urlopen(url)
     assert resp, resp.getcode() == 200
     print('resp.getcode: %s' % resp.getcode())
@@ -142,6 +146,18 @@ def wenku_baidu_download(url, output_dir = '.'):
 
     data = data.decode('utf-8')
     assert data
+    """
+
+    driver = webdriver.Chrome()
+    driver.get(url)
+    # time.sleep(20)
+    # pickle.dump(driver.get_cookies(), open("cookies.pkl", "wb"))
+    cookies = pickle.load(open("cookies.pkl", "rb"))
+    for cookie in cookies:
+        driver.add_cookie(cookie)
+    driver.get(url)
+    time.sleep(20)
+    data = driver.page_source
 
     """
     doc_title = r1(r'\'title\'\:\s+\'(.+)\'', data)
@@ -183,6 +199,10 @@ def wenku_baidu_download(url, output_dir = '.'):
         # print(wkinfo_htmlurls)
 
         get_doc_wrapper(wkinfo_htmlurls, path_file)
+    elif doc_type == 3: # 'doc' is 3 now also, just temp for 'pdf'
+        html_urls = page_data_json["readerInfo2019"]["htmlUrls"]
+        # print(html_urls)
+        get_doc_wrapper(html_urls, path_file)
     elif doc_type == 'txt':
         getdocinfo_url = 'https://wenku.baidu.com/api/doc/getdocinfo'
         getdocinfo_url = getdocinfo_url + '?callback=cb&doc_id=' + doc_id
