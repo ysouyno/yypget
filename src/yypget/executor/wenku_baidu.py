@@ -136,8 +136,25 @@ def get_txt_wrapper(url, path_file):
     get_txt(txt_json_url, path_file)
 
 def wenku_baidu_download(url, output_dir = '.'):
-    """
-    resp = request.urlopen(url)
+    headers = {
+        # 'Accept': 'application/json, text/plain, */*',
+        # 'Accept-Encoding': 'gzip, deflate, br',
+        # 'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+        # 'Cache-Control': 'no-cache, no-store',
+        # 'Connection': 'keep-alive',
+        'Cookie': 'Get it yourself',
+        # 'Host': 'wenku.baidu.com',
+        # 'Pragma': 'no-cache',
+        # 'Referer': 'https://wenku.baidu.com/view/f0fe92b7360cba1aa811daf7.html',
+        # 'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"',
+        # 'sec-ch-ua-mobile': '?0',
+        # 'Sec-Fetch-Dest': 'empty',
+        # 'Sec-Fetch-Mode': 'cors',
+        # 'Sec-Fetch-Site': 'same-origin',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'
+    }
+    req = request.Request(url=url, headers=headers)
+    resp = request.urlopen(req)
     assert resp, resp.getcode() == 200
     print('resp.getcode: %s' % resp.getcode())
 
@@ -146,8 +163,8 @@ def wenku_baidu_download(url, output_dir = '.'):
 
     data = data.decode('utf-8')
     assert data
-    """
 
+    """
     driver = webdriver.Chrome()
     driver.get(url)
     # time.sleep(20)
@@ -158,6 +175,7 @@ def wenku_baidu_download(url, output_dir = '.'):
     driver.get(url)
     time.sleep(20)
     data = driver.page_source
+    """
 
     """
     doc_title = r1(r'\'title\'\:\s+\'(.+)\'', data)
@@ -178,13 +196,13 @@ def wenku_baidu_download(url, output_dir = '.'):
 
     page_data_json = json.loads(page_data)
 
-    doc_title = page_data_json["docInfo2019"]["doc_info"]["title"]
+    doc_title = page_data_json["viewBiz"]["docInfo"]["title"]
     print('title: %s' % doc_title)
 
-    doc_id = page_data_json["docInfo2019"]["doc_info"]["show_doc_id"]
+    doc_id = page_data_json["viewBiz"]["docInfo"]["showDocId"]
     print('show_doc_id: %s' % doc_id)
 
-    doc_type = page_data_json["docInfo2019"]["doc_info"]["doc_type"];
+    doc_type = page_data_json["viewBiz"]["docInfo"]["docBizType"];
     print('doc_type: %s' % doc_type)
 
     output_dir = os.path.realpath(output_dir)
@@ -194,13 +212,13 @@ def wenku_baidu_download(url, output_dir = '.'):
 
     if doc_type == 2: # 'doc'
         # wkinfo_htmlurls = r1(r'WkInfo.htmlUrls\s+\=\s+\'(.+)\'\;', data)
-        wkinfo_htmlurls = page_data_json["readerInfo2019"]["htmlUrls"]
+        wkinfo_htmlurls = page_data_json["readerInfo"]["htmlUrls"]
         assert wkinfo_htmlurls
         # print(wkinfo_htmlurls)
 
         get_doc_wrapper(wkinfo_htmlurls, path_file)
     elif doc_type == 3: # 'doc' is 3 now also, just temp for 'pdf'
-        html_urls = page_data_json["readerInfo2019"]["htmlUrls"]
+        html_urls = page_data_json["readerInfo"]["htmlUrls"]
         # print(html_urls)
         get_doc_wrapper(html_urls, path_file)
     elif doc_type == 'txt':
